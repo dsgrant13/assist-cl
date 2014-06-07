@@ -22,7 +22,7 @@ puts "What school would you like to transfer to?"
 to = schools[gets.chomp]
 puts to
 puts "What is your major?"
-major = schools[gets]
+major = gets.chomp #Will be = majors[gets.chomp.to_sym] when majors.txt has been pulled from assist
 
 uri = URI("http://web1.assist.org/cgi-bin/REPORT_2/Rep2.pl?aay=13-14&dora=ECON&oia=#{to}&ay=14-15&event=19&ria=#{to}&agreement=aa&sia=#{from}&ia=#{from}&dir=1&&sidebar=false&rinst=left&mver=2&kind=5&dt=2")
 
