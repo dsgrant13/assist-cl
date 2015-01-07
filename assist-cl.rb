@@ -4,6 +4,8 @@
 
 require 'net/http'
 require 'io/console'
+require 'nokogiri'
+require 'open-uri'
 
 school_keys = IO.readlines("school_keys.txt")
 school_values = IO.readlines("school_values.txt")
@@ -24,10 +26,18 @@ puts to
 puts "What is your major?"
 major = gets.chomp #Will be = majors[gets.chomp.to_sym] when majors.txt has been pulled from assist
 
-uri = URI("http://web1.assist.org/cgi-bin/REPORT_2/Rep2.pl?aay=13-14&dora=ECON&oia=#{to}&ay=14-15&event=19&ria=#{to}&agreement=aa&sia=#{from}&ia=#{from}&dir=1&&sidebar=false&rinst=left&mver=2&kind=5&dt=2")
+page = Nokogiri::HTML(open("http://web1.assist.org/cgi-bin/REPORT_2/Rep2.pl?aay=13-14&dora=ECON&oia=#{to}&ay=14-15&event=19&ria=#{to}&agreement=aa&sia=#{from}&ia=#{from}&dir=1&&sidebar=false&rinst=left&mver=2&kind=5&dt=2"))
 
-agreement = Net::HTTP.get(uri)
+agreement = page.css('PRE').text
+puts agreement
+=begin
+agreement.lines.each do |line|
+  puts 'This is happening'
+  puts remove_html(line)
+end
+=end
 
+=begin
 f = File.open("agreement.txt", 'w+') { |f| f.write(agreement) }
 lines = IO.readlines("agreement.txt")
 
@@ -64,6 +74,7 @@ end
 def bracket?(char)
   char == '<' or char == '>'
 end
+=end
 
 def remove_html(line)
   if line.include? '<'
@@ -79,7 +90,7 @@ def remove_html(line)
     return line
   end
 end
-
+=begin
 lines.each do |line|
   line = remove_html(line)
   puts line
@@ -93,4 +104,4 @@ f = File.open("agreement.txt", 'w') do |f|
     f.write(line)
   end
 end
-
+=end
